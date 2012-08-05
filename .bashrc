@@ -18,13 +18,7 @@ if [ -f /etc/bash_completion ]; then
 fi
 
 #Determine if FreeBSD or Linux
-platform='unknown'
-unamestr=`uname`
-if [[ "$unamestr" == 'Linux' ]]; then
-	platform='Linux'
-elif [[ "$unamestr" == 'FreeBSD' ]]; then
-	platform='FreeBSD'
-fi
+unamestr=$(uname)
 
 #Make sure the text fits in the console
 shopt -s checkwinsize
@@ -43,11 +37,14 @@ alias ps='ps auxf'
 alias date='date "+%Y-%m-%d %A	%T %Z"'
 
 #Color ls
-if[[$platform == 'Linux' ]]; then
+case $unamestr in
+'Linux' )
 	alias ls='ls -AFal --color=auto'
-elif[[$platform == 'FreeBSD' ]]; then
-	alias ls='ls -AFGal'
-fi
+	;;
+'FreeBSD' )
+	alias ls='ls -AFGal' 
+	;;
+esac
 
 #Wrap nano text
 alias nano='nano -w'
@@ -70,9 +67,12 @@ alias du='du -sh -c'
 ###########
 ##EXPORTS##
 ###########
-if [[$platform == 'FreeBSD' ]]; then
+case $unamestr in
+'FreeBSD' )
 	PATH="/usr/local/bin:$PATH"
-fi
+	;;
+esac
+
 export PATH
 
 export EDITOR=nano
